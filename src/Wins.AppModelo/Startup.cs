@@ -22,7 +22,7 @@ namespace Wins.AppModelo
         {
             Configuration = configuration;
         }
-        
+        sdfsdfsd
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
