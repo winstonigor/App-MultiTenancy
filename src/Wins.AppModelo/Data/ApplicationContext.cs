@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Wins.AppModelo.Domain;
+using Wins.AppModelo.Provider;
 
 namespace Wins.AppModelo.Data
 {
@@ -11,10 +12,12 @@ namespace Wins.AppModelo.Data
     {
         public DbSet<Pessoa> Pessoas { get; set; }
         public DbSet<Produto> Produtos { get; set; }
-
-        public ApplicationContext(DbContextOptions<ApplicationContext>options): base(options)
+        private readonly TenantData _tenant;
+        public ApplicationContext(
+            DbContextOptions<ApplicationContext>options, 
+            TenantData tenant): base(options)
         {
-
+            _tenant = tenant;
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,7 +32,10 @@ namespace Wins.AppModelo.Data
                 new Produto { Id = 2, Descricao = "Produto 2", TenantId = "tenant-2" },
                 new Produto { Id = 3, Descricao = "Produto 3", TenantId = "tenant-2" },
                 new Produto { Id = 4, Descricao = "Produto 4", TenantId = "tenant-3" });
-                
+
+            modelBuilder.Entity<Pessoa>().HasQueryFilter(p => p.TenantId == _tenant.TenantId);
+            modelBuilder.Entity<Produto>().HasQueryFilter(p => p.TenantId == _tenant.TenantId);
+
         }
     }
 }

@@ -10,7 +10,7 @@ using Wins.AppModelo.Domain;
 namespace Wins.AppModelo.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("{tenant}/[controller]")]
     public class PessoaController : ControllerBase
     {
       
