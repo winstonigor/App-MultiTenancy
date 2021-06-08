@@ -11,22 +11,22 @@ namespace Wins.AppModelo.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class PessoaController : ControllerBase
+    public class ProdutoController : ControllerBase
     {
       
-        private readonly ILogger<PessoaController> _logger;
+        private readonly ILogger<ProdutoController> _logger;
 
-        public PessoaController(ILogger<PessoaController> logger)
+        public ProdutoController(ILogger<ProdutoController> logger)
         {
             _logger = logger;
         }
 
         [HttpGet]
-        public IEnumerable<Pessoa> Get([FromServices]ApplicationContext db)
+        public IEnumerable<Produto> Get([FromServices]ApplicationContext db)
         {
-            var pessoas = db.Pessoas.ToArray();
+            var produtos = db.Produtos.ToArray();
 
-            return pessoas;
+            return produtos;
         }
     }
 }

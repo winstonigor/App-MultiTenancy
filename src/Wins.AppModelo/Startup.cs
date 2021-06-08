@@ -28,13 +28,22 @@ namespace Wins.AppModelo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
             services.AddDbContext<ApplicationContext>(opt =>
             {
-                opt.UseSqlite("Database Source=Database\\Tenant.db")
+                opt.UseSqlServer("Data Source=(localdb)\\mssqllocaldb; Initial Catalog=Tenant99;Integrated Security=true;")
                 .LogTo(Console.WriteLine)
                 .EnableSensitiveDataLogging();
 
             });
+
+            //services.AddDbContext<ApplicationContext>(opt =>
+            //{
+            //    opt.UseSqlite("Database Source=Database\\Tenant.db")
+            //    .LogTo(Console.WriteLine)
+            //    .EnableSensitiveDataLogging();
+
+            //});
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -43,7 +52,8 @@ namespace Wins.AppModelo
             {
                 app.UseDeveloperExceptionPage();
             }
-            
+
+            IniciarBaseDeDados(app);
 
             app.UseHttpsRedirection();
 
