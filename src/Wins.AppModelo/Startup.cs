@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Wins.AppModelo.Data;
 using Wins.AppModelo.Domain;
+using Wins.AppModelo.Provider;
 
 namespace Wins.AppModelo
 {
@@ -27,6 +28,7 @@ namespace Wins.AppModelo
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<TenantData>();
             services.AddControllers();
 
             services.AddDbContext<ApplicationContext>(opt =>
