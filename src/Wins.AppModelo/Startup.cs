@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Wins.AppModelo.Data;
 using Wins.AppModelo.Domain;
+using Wins.AppModelo.Middlewares;
 using Wins.AppModelo.Provider;
 
 namespace Wins.AppModelo
@@ -28,24 +29,24 @@ namespace Wins.AppModelo
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<TenantData>();
+            services.AddScoped<TenantData>();// <=
             services.AddControllers();
-
-            services.AddDbContext<ApplicationContext>(opt =>
-            {
-                opt.UseSqlServer("Data Source=(localdb)\\mssqllocaldb; Initial Catalog=Tenant99;Integrated Security=true;")
-                .LogTo(Console.WriteLine)
-                .EnableSensitiveDataLogging();
-
-            });
 
             //services.AddDbContext<ApplicationContext>(opt =>
             //{
-            //    opt.UseSqlite("Database Source=Database\\Tenant.db")
+            //    opt.UseSqlServer("Data Source=(localdb)\\mssqllocaldb; Initial Catalog=Tenant99;Integrated Security=true;")
             //    .LogTo(Console.WriteLine)
             //    .EnableSensitiveDataLogging();
 
             //});
+
+            services.AddDbContext<ApplicationContext>(opt =>
+            {
+                opt.UseSqlite("Data Source=Database\\Tenant.db")
+                .LogTo(Console.WriteLine)
+                .EnableSensitiveDataLogging();
+
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -55,13 +56,15 @@ namespace Wins.AppModelo
                 app.UseDeveloperExceptionPage();
             }
 
-            IniciarBaseDeDados(app);
+           // IniciarBaseDeDados(app);
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseMiddleware<TenantMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
@@ -74,23 +77,23 @@ namespace Wins.AppModelo
         /// informações de produtos e pessoas
         /// </summary>
         /// <param name="app"></param>
-        private void IniciarBaseDeDados(IApplicationBuilder app)
-        {
-            using var db = app.ApplicationServices
-                .CreateScope()
-                .ServiceProvider
-                .GetRequiredService<ApplicationContext>();
+        //private void IniciarBaseDeDados(IApplicationBuilder app)
+        //{
+        //    using var db = app.ApplicationServices
+        //        .CreateScope()
+        //        .ServiceProvider
+        //        .GetRequiredService<ApplicationContext>();
 
-            db.Database.EnsureDeleted();
-            db.Database.EnsureCreated();
+        //    db.Database.EnsureDeleted();
+        //    db.Database.EnsureCreated();
 
-            for ( var i=1; i<= 5; i++)
-            {
-                db.Pessoas.Add(new Pessoa {Nome = $"Pessoa{i}" });
-                db.Produtos.Add(new Produto {Descricao = $"Descriçãos{i}" });
-            }
+        //    for ( var i=1; i<= 5; i++)
+        //    {
+        //        db.Pessoas.Add(new Pessoa {Nome = $"Pessoa{i}" });
+        //        db.Produtos.Add(new Produto {Descricao = $"Descriçãos{i}" });
+        //    }
 
-            db.SaveChanges();
-        }
+        //    db.SaveChanges();
+        //}
     }
 }

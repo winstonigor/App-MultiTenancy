@@ -7,6 +7,6 @@ namespace Wins.AppModelo.Provider
 {
     public class TenantData
     {
-        public Guid TenantId { get; set; }
+        public string TenantId { get; set; }
     }
 }
